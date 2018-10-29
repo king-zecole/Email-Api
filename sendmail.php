@@ -24,13 +24,36 @@
         die;
     }
     
-    $to             = strip_tags($_POST['to']); //put your email here
+    $data = json_decode(file_get_contents("php://input"));
+    
+    if(
+        !empty($data->to) &&
+        !empty($data->subject) &&
+        !empty($data->email) &&
+        !empty($data->name) &&
+        !empty($data->message)
+    ){
+    
+    $to         = strip_tags($data->to); //put your email here
 
-    $subject    = strip_tags($_POST['subject']);
-    $email      = strip_tags($_POST['email']);
-    $name       = strip_tags($_POST['name']);
-    $message    = nl2br( htmlspecialchars($_POST['message'], ENT_QUOTES) );
+    $subject    = strip_tags($data->subject);
+    $email      = strip_tags($data->email);
+    $name       = strip_tags($data->name);
+    $message    = nl2br( htmlspecialchars($data->message, ENT_QUOTES) );
     $result     = array();
+    
+    }else if(
+        empty($data->to) &&
+        empty($data->subject) &&
+        empty($data->email) &&
+        empty($data->name) &&
+        empty($data->message)
+    ){
+        
+        $result = array( 'response' => 'error', 'empty'=>'All Field', 'message'=>'<strong>Error!</strong> JSON post data is empty.' );
+        echo json_encode($result );
+        die;
+    }
 
 
     if(empty($name)){
