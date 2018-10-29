@@ -3,14 +3,15 @@
 
     session_cache_limiter( 'nocache' );
     header( 'Expires: ' . gmdate( 'r', 0 ) );
-    header( 'Content-type: application/json' );
+    header( 'Content-Type: application/json; charset=UTF-8' );
     header( 'Accept: application/json' );
+    header( 'Access-Control-Allow-Methods: POST' );
 
     //echo file_get_contents('php://input'); // prints post request
     
     if(strtoupper($_SERVER['REQUEST_METHOD']) != "POST"){
         
-      $result = array( 'response' => 'error', 'message'=>'GET not Implemented');
+      $result = array( 'response' => 'error', 'message'=> $_SERVER['REQUEST_METHOD'].' not Implemented');
       echo json_encode($result );
       die;
         
